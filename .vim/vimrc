@@ -1,0 +1,34 @@
+
+set number
+set nocompatible
+set encoding=utf-8
+set tabstop=2
+set shiftwidth=2
+set autoindent
+set smartindent
+filetype plugin indent on
+
+" Reload vim on all changes
+augroup myvimrc
+    au!
+    au BufWritePost .vimrc,_vimrc,vimrc,.gvimrc,_gvimrc,gvimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
+augroup END
+
+" Immediately set up and install vim-plug and plugins if they don't exist
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall
+endif
+
+" vim-plugged
+call plug#begin('~/.vim/plugged')
+runtime! module/**/*.vim
+call plug#end()
+
+set termguicolors
+color dracula
+
+" Disable Netrw
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
