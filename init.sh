@@ -14,7 +14,7 @@ success() {
 }
 
 command_exists() {
-	command -v "$cmd" >/dev/null 2>&1
+	command -v "$@" >/dev/null 2>&1
 }
 
 darwin_install_if_not_exists() {
