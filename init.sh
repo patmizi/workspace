@@ -14,7 +14,7 @@ success() {
 }
 
 command_exists() {
-	command -v "$@" >/dev/null 2>&1
+	command -v $@ >/dev/null 2>&1
 }
 
 darwin_install_if_not_exists() {
@@ -29,7 +29,7 @@ darwin_install_if_not_exists() {
 }
 
 ubuntu_install_if_not_exists() {
-    if ! command_exists $@; then
+    if ! command_exists "$@"; then
         warn "$@ not installed. Installing now..."
         sudo apt-get install -y $@ || {
             error "$@ installation failed"
