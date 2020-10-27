@@ -48,6 +48,13 @@ darwin_setup() {
 ubuntu_setup() {
     ubuntu_install_if_not_exists git
     ubuntu_install_if_not_exists neovim
+    if ! command_exists terraform-ls; then
+        warn "terraform-ls not installed. Installing now..."
+        wget -q -O tfls.zip https://github.com/hashicorp/terraform-ls/releases/download/v0.8.0/terraform-ls_0.8.0_linux_amd64.zip
+        sudo unzip tfls.zip -d /usr/local/bin/
+        rm -f tfls.zip
+        success "terraform-ls has been installed"
+    fi
 }
 
 common_setup() {
