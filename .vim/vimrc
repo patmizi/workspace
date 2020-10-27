@@ -45,6 +45,8 @@ call plug#end()
 set termguicolors
 color dracula
 
+autocmd vimenter * NERDTree
+
 " Disable Netrw
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
