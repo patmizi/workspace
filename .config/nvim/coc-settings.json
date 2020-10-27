@@ -1,8 +1,11 @@
 {
 	"languageserver": {
 		"terraform": {
-			"command": "terraform-lsp",
-			"filetypes": ["terraform"]
+			"command": "terraform-ls",
+			"filetypes": [
+				"terraform",
+				"tf"
+			]
 		},
 		"dockerfile": {
 			"command": "docker-langserver",

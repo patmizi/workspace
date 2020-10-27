@@ -14,47 +14,40 @@ success() {
 }
 
 command_exists() {
-	command -v "$@" >/dev/null 2>&1
+	command -v "$cmd" >/dev/null 2>&1
+}
+
+darwin_install_if_not_exists() {
+    if ! command_exists $@; then
+        warn "$@ not installed. Installing now..."
+        brew install $@ || {
+            error "$@ installation failed"
+            exit 1
+        }
+        success "$@ has been installed"
+    fi
+}
+
+ubuntu_install_if_not_exists() {
+    if ! command_exists $@; then
+        warn "$@ not installed. Installing now..."
+        sudo apt-get install -y $@ || {
+            error "$@ installation failed"
+            exit 1
+        }
+        success "$@ has been installed"
+    fi
 }
 
 darwin_setup() {
-    if ! command_exists git; then
-        warn 'Git not installed. Installing now...'
-        brew install git || {
-            error 'Git installation failed'
-            exit 1
-        }
-        success 'Git has been installed'
-    fi
-    if ! command_exists nvim; then
-        warn 'NeoVim not installed. Installing now...'
-        brew install neovim || {
-            error 'NeoVim installation failed'
-            exit 1
-        }
-        success 'NeoVim has been installed'
-    fi
-    return
+    darwin_install_if_not_exists git
+    darwin_install_if_not_exists neovim
+    darwin_install_if_not_exists hashicorp/tap/terraform-ls
 }
 
 ubuntu_setup() {
-    if ! command_exists git; then
-        warn 'Git not installed. Installing now...'
-        sudo apt-get install -y git || {
-            error 'Git installation failed'
-            exit 1
-        }
-        success 'Git has been installed'
-    fi
-    if ! command_exists nvim; then
-        warn 'NeoVim not installed. Installing now...'
-        sudo apt-get install -y neovim || {
-            error 'NeoVim installation failed'
-            exit 1
-        }
-        success 'NeoVim has been installed'
-    fi
-    return
+    ubuntu_install_if_not_exists git
+    ubuntu_install_if_not_exists neovim
 }
 
 common_setup() {
@@ -62,7 +55,7 @@ common_setup() {
     mkdir -p ~/.workspace_tmp 
     git clone --depth=1 https://github.com/patmizi/workspace ~/.workspace_tmp
     rsync -av ~/.workspace_tmp/ ~/ --exclude=init.sh --exclude=.git
-    # rm -rf ~/.workspace_tmp
+    rm -rf ~/.workspace_tmp
 }
 
 if [ -f /etc/os-release ]; then
