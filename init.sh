@@ -43,6 +43,9 @@ darwin_setup() {
     darwin_install_if_not_exists git
     darwin_install_if_not_exists neovim
     darwin_install_if_not_exists hashicorp/tap/terraform-ls
+		brew tap homebrew/cask-fonts
+		brew cask install font-jetbrains-mono-nerd-font
+		warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
 }
 
 ubuntu_setup() {
@@ -55,6 +58,11 @@ ubuntu_setup() {
         rm -f tfls.zip
         success "terraform-ls has been installed"
     fi
+		mkdir -p ~/.local/share/fonts
+		pushd ~/.local/share/fonts
+			curl -fLo "JetBrains Mono Regular Nerd Font Complete Mono.ttf" "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf"
+			warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
+		popd
 }
 
 common_setup() {
@@ -62,7 +70,7 @@ common_setup() {
     mkdir -p ~/.workspace_tmp 
     git clone --depth=1 https://github.com/patmizi/workspace ~/.workspace_tmp
     rsync -av ~/.workspace_tmp/ ~/ --exclude=init.sh --exclude=.git
-    rm -rf ~/.workspace_tmp
+		rm -rf ~/.workspace_tmp
 }
 
 if [ -f /etc/os-release ]; then
