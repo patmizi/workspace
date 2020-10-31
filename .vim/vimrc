@@ -1,11 +1,12 @@
 set number
 set nocompatible
-set encoding=utf-8
+set encoding=utf8
 set tabstop=2
 set shiftwidth=2
 set autoindent
-set smartindent
+"set smartindent
 filetype plugin indent on
+set expandtab
 
 " Key mappings
 " CTRL-S to save
@@ -23,6 +24,14 @@ nmap <silent> <A-Up> :wincmd k<CR>
 nmap <silent> <A-Down> :wincmd j<CR>
 nmap <silent> <A-Left> :wincmd h<CR>
 nmap <silent> <A-Right> :wincmd l<CR>
+
+" Toggle NERDTree
+nmap <F6> :NERDTreeToggle<CR>
+
+" Comment Toggles
+nmap <C-_>   <Plug>NERDCommenterToggle
+imap <C-_>	 <Plug>NERDCommenterInsert
+vmap <C-_>   <Plug>NERDCommenterToggle<CR>gv
 
 " Reload vim on all changes
 augroup myvimrc
@@ -45,8 +54,7 @@ call plug#end()
 set termguicolors
 color dracula
 
-autocmd vimenter * NERDTree
-
 " Disable Netrw
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
+

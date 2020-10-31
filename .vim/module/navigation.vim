@@ -1,5 +1,4 @@
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+let g:NERDTreeShowHidden=1 
 Plug 'christoomey/vim-tmux-navigator'
-" Plug 'ryanoasis/vim-devicons'
-
 Plug 'simeji/winresizer'
