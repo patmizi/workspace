@@ -71,6 +71,7 @@ ubuntu_setup() {
     fi
     mkdir -p ~/.local/share/fonts
     pushd ~/.local/share/fonts
+        warn 'JetBrains Mono font not installed. Installing now'
         curl -fLo "JetBrains Mono Regular Nerd Font Complete Mono.ttf" "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf"
         warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
     popd
@@ -86,11 +87,8 @@ arch_setup() {
         rm -f tfls.zip
         success "terraform-ls has been installed"
     fi
-    mkdir -p ~/.local/share/fonts
-    pushd ~/.local/share/fonts
-        curl -fLo "JetBrains Mono Regular Nerd Font Complete Mono.ttf" "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf"
-        warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
-    popd
+    arch_install_if_not_exists ttf-jetbrains-mono
+    warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
 }
 
 common_setup() {
@@ -99,7 +97,11 @@ common_setup() {
     git clone --depth=1 https://github.com/patmizi/workspace ~/.workspace_tmp
     rsync -av ~/.workspace_tmp/ ~/ --exclude=init.sh --exclude=.git
 	rm -rf ~/.workspace_tmp
-    curl -s "https://get.sdkman.io" | bash
+    if ! command_exists sdk; then
+        warn "SDKMan not installed. Installing now..."
+        curl -s "https://get.sdkman.io" | bash
+        success "SDKMan installed"
+    fi
 }
 
 if [ -f /etc/os-release ]; then
@@ -111,14 +113,18 @@ else
     VER=$(uname -r)
 fi
 
-if [ $OS == 'Darwin' ]; then
+success "OS: $OS"
+success "VER: $VER"
+
+if [[ $OS == 'Darwin' ]]; then
     success 'Setting up Mac environment'
     darwin_setup
-elif [ $OS == 'Ubuntu' ]; then
+elif [[ $OS == 'Ubuntu' ]]; then
     success 'Setting up Ubuntu environment'
     ubuntu_setup
-elif [ $OS == 'Manjaro Linux' ]; then
+elif [[ $OS == 'Manjaro Linux' ]]; then
     success 'Setting up Manjaro environment'
+    arch_setup
 else
     warn 'Could not find supported operating system'
 fi
