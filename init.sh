@@ -39,13 +39,24 @@ ubuntu_install_if_not_exists() {
     fi
 }
 
+arch_install_if_not_exists() {
+    if ! command_exists "$@"; then
+        warn "$@ not installed. Installing now..."
+        sudo pacman -S --noconfirm $@ || {
+            error "$@ installation failed"  
+            exit 1
+        }
+        success "$@ has been installed"
+    fi
+}
+
 darwin_setup() {
     darwin_install_if_not_exists git
     darwin_install_if_not_exists neovim
     darwin_install_if_not_exists hashicorp/tap/terraform-ls
-		brew tap homebrew/cask-fonts
-		brew cask install font-jetbrains-mono-nerd-font
-		warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
+	brew tap homebrew/cask-fonts
+	brew cask install font-jetbrains-mono-nerd-font
+	warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
 }
 
 ubuntu_setup() {
@@ -58,11 +69,28 @@ ubuntu_setup() {
         rm -f tfls.zip
         success "terraform-ls has been installed"
     fi
-		mkdir -p ~/.local/share/fonts
-		pushd ~/.local/share/fonts
-			curl -fLo "JetBrains Mono Regular Nerd Font Complete Mono.ttf" "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf"
-			warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
-		popd
+    mkdir -p ~/.local/share/fonts
+    pushd ~/.local/share/fonts
+        curl -fLo "JetBrains Mono Regular Nerd Font Complete Mono.ttf" "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf"
+        warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
+    popd
+}
+
+arch_setup() {
+    arch_install_if_not_exists git
+    arch_install_if_not_exists neovim
+    if ! command_exists terraform-ls; then
+        warn "terraform-ls not installed. Installing now..."
+        wget -q -O tfls.zip https://github.com/hashicorp/terraform-ls/releases/download/v0.8.0/terraform-ls_0.8.0_linux_amd64.zip
+        sudo unzip tfls.zip -d /usr/local/bin/
+        rm -f tfls.zip
+        success "terraform-ls has been installed"
+    fi
+    mkdir -p ~/.local/share/fonts
+    pushd ~/.local/share/fonts
+        curl -fLo "JetBrains Mono Regular Nerd Font Complete Mono.ttf" "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf"
+        warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
+    popd
 }
 
 common_setup() {
@@ -70,7 +98,8 @@ common_setup() {
     mkdir -p ~/.workspace_tmp 
     git clone --depth=1 https://github.com/patmizi/workspace ~/.workspace_tmp
     rsync -av ~/.workspace_tmp/ ~/ --exclude=init.sh --exclude=.git
-		rm -rf ~/.workspace_tmp
+	rm -rf ~/.workspace_tmp
+    curl -s "https://get.sdkman.io" | bash
 }
 
 if [ -f /etc/os-release ]; then
@@ -88,6 +117,8 @@ if [ $OS == 'Darwin' ]; then
 elif [ $OS == 'Ubuntu' ]; then
     success 'Setting up Ubuntu environment'
     ubuntu_setup
+elif [ $OS == 'Manjaro Linux' ]; then
+    success 'Setting up Manjaro environment'
 fi
 
 common_setup
