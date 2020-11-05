@@ -119,6 +119,8 @@ elif [ $OS == 'Ubuntu' ]; then
     ubuntu_setup
 elif [ $OS == 'Manjaro Linux' ]; then
     success 'Setting up Manjaro environment'
+else
+    warn 'Could not find supported operating system'
 fi
 
 common_setup
