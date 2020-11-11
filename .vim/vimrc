@@ -5,6 +5,7 @@ set tabstop=2
 set shiftwidth=2
 set autoindent
 "set smartindent
+set ff=unix
 filetype plugin indent on
 set expandtab
 
@@ -32,6 +33,9 @@ nmap <F6> :NERDTreeToggle<CR>
 nmap <C-_>   <Plug>NERDCommenterToggle
 imap <C-_>	 <Plug>NERDCommenterInsert
 vmap <C-_>   <Plug>NERDCommenterToggle<CR>gv
+
+" Auto-indent entire file
+map <F7> gg=G<C-o><C-o>
 
 " Reload vim on all changes
 augroup myvimrc

@@ -1,5 +1,4 @@
-#! /usr/bin/env bash
-set -e
+#!/usr/bin/env bash
 
 error() {
     printf "\033[31;1m $1 \033[0m\n"
@@ -14,7 +13,7 @@ success() {
 }
 
 command_exists() {
-	command -v $@ >/dev/null 2>&1
+    command -v "$1" >/dev/null 2>&1
 }
 
 darwin_install_if_not_exists() {
@@ -54,9 +53,9 @@ darwin_setup() {
     darwin_install_if_not_exists git
     darwin_install_if_not_exists neovim
     darwin_install_if_not_exists hashicorp/tap/terraform-ls
-	brew tap homebrew/cask-fonts
-	brew cask install font-jetbrains-mono-nerd-font
-	warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
+	  brew tap homebrew/cask-fonts
+	  brew cask install font-jetbrains-mono-nerd-font
+	  warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
 }
 
 ubuntu_setup() {
@@ -96,7 +95,7 @@ common_setup() {
     mkdir -p ~/.workspace_tmp 
     git clone --depth=1 https://github.com/patmizi/workspace ~/.workspace_tmp
     rsync -av ~/.workspace_tmp/ ~/ --exclude=init.sh --exclude=.git
-	rm -rf ~/.workspace_tmp
+    rm -rf ~/.workspace_tmp
     if ! command_exists sdk; then
         warn "SDKMan not installed. Installing now..."
         curl -s "https://get.sdkman.io" | bash
