@@ -127,6 +127,7 @@
 
 (require 'init-misc)
 
+(require 'init-tabbar)
 (require 'init-folding)
 (require 'init-dash)
 
