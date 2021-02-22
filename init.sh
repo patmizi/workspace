@@ -56,7 +56,6 @@ darwin_setup() {
 	  brew tap homebrew/cask-fonts
 	  brew cask install font-jetbrains-mono-nerd-font
 	  warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
-    darwin_install_if_not_exists emacs
 }
 
 ubuntu_setup() {
@@ -75,7 +74,6 @@ ubuntu_setup() {
         curl -fLo "JetBrains Mono Regular Nerd Font Complete Mono.ttf" "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/patched-fonts/JetBrainsMono/Regular/complete/JetBrains%20Mono%20Regular%20Nerd%20Font%20Complete%20Mono.ttf"
         warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
     popd
-    ubuntu_install_if_not_exists emacs
 }
 
 arch_setup() {
@@ -90,7 +88,6 @@ arch_setup() {
     fi
     arch_install_if_not_exists ttf-jetbrains-mono
     warn 'Custom font installed. Please set this manually otherwise devicons will not work :('
-    arch_install_if_not_exists emacs
 }
 
 common_setup() {
@@ -103,6 +100,11 @@ common_setup() {
         warn "SDKMan not installed. Installing now..."
         curl -s "https://get.sdkman.io" | bash
         success "SDKMan installed"
+    fi
+    if ! command_exists cargo; then
+        warn "Rust is not installed. Installing now..."
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+        success "Rust installed"
     fi
 }
 
