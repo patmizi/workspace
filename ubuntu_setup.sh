@@ -12,6 +12,7 @@ install_if_not_exists libnss3-dev
 install_if_not_exists libssl-dev
 install_if_not_exists libreadline-dev
 install_if_not_exists libffi-dev curl
+install_if_not_exists libsqlite3-dev
 
 install_if_not_exists zsh
 warn "Use the chsh command to change the default shell to zsh otherwise you'll be stuck with bash"
