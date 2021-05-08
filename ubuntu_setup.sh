@@ -3,6 +3,16 @@
 . $(dirname "${0}")/lib/common.sh
 . $(dirname "${0}")/lib/ubuntu.sh
 
+# Python lib dependencies
+install_if_not_exists build-essential
+install_if_not_exists zlib1g-dev
+install_if_not_exists libncurses5-dev 
+install_if_not_exists libgdbm-dev
+install_if_not_exists libnss3-dev
+install_if_not_exists libssl-dev
+install_if_not_exists libreadline-dev
+install_if_not_exists libffi-dev curl
+
 install_if_not_exists zsh
 warn "Use the chsh command to change the default shell to zsh otherwise you'll be stuck with bash"
 install_if_not_exists git
