@@ -1,5 +1,8 @@
 #! /usr/bin/env bash
 
+ERROR_CHECK_BINARY=106
+ERROR_CHECK_PACKAGE=107
+
 error() {
     printf "\033[31;1m $1 \033[0m\n"
 }
@@ -13,10 +16,27 @@ success() {
 }
 
 command_exists() {
-    command -v "$1" >/dev/null 2>&1
+    $(command -v "$1" >/dev/null 2>&1) && echo 1
+}
+
+package_exists() {
+    $(dpkg -l "$1" >/dev/null 2>&1) && echo 1
+}
+
+file_exists() {
+    $(ls "$1" >/dev/null 2>&1) && echo 1
+}
+
+directory_exists() {
+    $(ls "$1" >/dev/null 2>&1) && echo 1
+}
+
+path_contains() {
+    [[ $PATH == *"$1"* ]] && echo 1
 }
 
 common_setup() {
+    ls ~
     if [ ! -ds ~/.oh-my-zsh ]; then
         warn "Oh My Zsh is not installed. Installin now..."
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -59,6 +79,6 @@ common_setup() {
     rm -rf ~/.workspace_tmp
     mkdir -p ~/.workspace_tmp 
     git clone --depth=1 https://github.com/patmizi/workspace ~/.workspace_tmp
-    rsync -av ~/.workspace_tmp/ ~/ --exclude=init.sh --exclude=.git
+    rsync -av ~/.workspace_tmp/ ~/ --exclude=init.sh --exclude=.git --exclude=README.md --exclude=lib --exclude=darwin
     rm -rf ~/.workspace_tmp
 }

@@ -1,23 +1,37 @@
 #! /usr/bin/env bash
 
+. $(dirname "${0}")/lib/common.sh
+
 install_if_not_exists() {
-    if ! command_exists "$@"; then
-        warn "$@ not installed. Installing now..."
-        yes | sudo apt-get install $@ || {
-            error "$@ installation failed"
-            exit 1
-        }
-        success "$@ has been installed"
+    _does_command_exist=$(command_exists "$@")
+    status_code=$?
+    if [ $status_code -ne 0 ]; then
+        _does_package_exist=$(package_exists "$@")
+        status_code=$?
+        if [ $status_code -ne 0 ]; then
+            warn "$@ not installed. Installing now..."
+            yes | sudo apt-get install $@ || {
+                error "$@ installation failed"
+                exit 1
+            }
+            success "$@ has been installed"
+        fi
     fi
 }
 
 snap_install_if_not_exists() {
-    if ! command_exists "$@"; then
-        warn "$@ not installed. Installing now..."
-        yes | sudo apt-get install --classic $@ || {
-            error "$@ installation failed"
-            exit 1
-        }
-        success "$@ has been installed"
+    _does_command_exist=$(command_exists "$@")
+    status_code=$?
+    if [ $status_code -ne 0 ]; then
+        _does_package_exist=$(package_exists "$@")
+        status_code=$?
+        if [ $status_code -ne 0 ]; then
+            warn "$@ not installed. Installing now..."
+            yes | sudo snap install --classic $@ || {
+                error "$@ installation failed"
+                exit 1
+            }
+            success "$@ has been installed"
+        fi
     fi
 }
