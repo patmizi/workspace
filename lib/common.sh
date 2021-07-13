@@ -79,6 +79,6 @@ common_setup() {
     rm -rf ~/.workspace_tmp
     mkdir -p ~/.workspace_tmp 
     git clone --depth=1 https://github.com/patmizi/workspace ~/.workspace_tmp
-    rsync -av ~/.workspace_tmp/ ~/ --exclude=init.sh --exclude=.git --exclude=README.md --exclude=lib --exclude=darwin
+    rsync -av ~/.workspace_tmp/ ~/ --exclude=.git --exclude=README.md --exclude=lib --exclude=darwin --exclude=darwin_setup.sh --exclude=ubuntu_setup.sh --exclude=arch_setup.sh
     rm -rf ~/.workspace_tmp
 }
